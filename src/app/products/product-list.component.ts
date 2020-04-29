@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IProduct } from './products';
+import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 
 @Component({
   selector: 'pm-products',
@@ -11,7 +12,17 @@ export class ProductListComponent implements OnInit{
     imageWidth: number =50;
     imageMargin: number= 2;
     showImage: boolean= false;
-    listFilter: string='cart';
+    _listFilter: string;
+    get listFilter(): string{
+      return this._listFilter;
+    }
+    set listFilter(value: string){
+      this._listFilter= value;
+      this.filteredProducts = this.listFilter ? this.performFilter(this.listFilter) : this.products;
+    }
+
+
+    filteredProducts:IProduct[];
     products: IProduct[] =[ 
       {
         "productId": 2,
@@ -35,6 +46,18 @@ export class ProductListComponent implements OnInit{
         "imageUrl": "assets/images/hammer.png"
       }
     ]; 
+    
+    constructor (){
+      this.filteredProducts= this.products;
+      this.listFilter ='cart';
+      
+    }
+
+    performFilter(filterBy: string): IProduct[]{
+      filterBy = filterBy.toLocaleLowerCase();
+      return this.products.filter((product: IProduct)=>
+      product.productName.toLocaleLowerCase().indexOf(filterBy) !== -1);
+    }
 
     toggleImage(): void {
       this.showImage =!this.showImage
@@ -44,4 +67,5 @@ export class ProductListComponent implements OnInit{
       console.log('In OnInit')
     }
     
+
 }
