@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IProduct } from './products';
 import { ValueConverter } from '@angular/compiler/src/render3/view/template';
+import { ProductService } from './product.service';
 
 @Component({
   selector: 'pm-products',
@@ -23,12 +24,10 @@ export class ProductListComponent implements OnInit{
 
 
     filteredProducts:IProduct[];
-    products: IProduct[] =[ 
-    ]; 
+    products: IProduct[] =[]; 
     
-    constructor (){
-      this.filteredProducts= this.products;
-      this.listFilter ='cart';
+    constructor (private productService: ProductService){
+      this.listFilter ='';
       
     }
     
@@ -43,11 +42,13 @@ export class ProductListComponent implements OnInit{
     }
 
     toggleImage(): void {
-      this.showImage =!this.showImage
+      this.showImage =!this.showImage;
     }
 
     ngOnInit(){
-      console.log('In OnInit')
+      this.products = this.productService.getPoducts();
+      this.filteredProducts= this.products;
+
     }
     
 
