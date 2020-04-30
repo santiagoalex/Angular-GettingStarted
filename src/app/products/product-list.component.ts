@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IProduct } from './products';
 import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import { ProductService } from './product.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'pm-products',
@@ -13,6 +14,7 @@ export class ProductListComponent implements OnInit{
     imageWidth: number =50;
     imageMargin: number= 2;
     showImage: boolean= false;
+    errorMessage: string;
     _listFilter: string;
     get listFilter(): string{
       return this._listFilter;
@@ -45,9 +47,14 @@ export class ProductListComponent implements OnInit{
       this.showImage =!this.showImage;
     }
 
-    ngOnInit(){
-      this.products = this.productService.getPoducts();
-      this.filteredProducts= this.products;
+    ngOnInit(): void {
+        this.productService.getPoducts().subscribe({
+        next: products =>{
+        this.products = products;
+        this.filteredProducts= this.products;
+        },
+        error: err => this.errorMessage= err
+      });
 
     }
     
