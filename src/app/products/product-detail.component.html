@@ -1,0 +1,7 @@
+<!--  to prevent undefined error, is used ngif insted  safe operator ? -->
+<div class="card" *ngIf= 'product'> 
+    <div class="card-header">
+        {{pageTitle +': '+ product.productName}}
+    </div>
+</div>
+    
